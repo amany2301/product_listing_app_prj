@@ -6,7 +6,7 @@ import '../bloc/product_list/product_list_state.dart';
 import '../bloc/theme/theme_bloc.dart';
 import '../widgets/product_card.dart';
 import '../widgets/filter_chip.dart';
-
+import '../widgets/filter_dropdown.dart';
 
 class ProductListPage extends StatelessWidget {
   const ProductListPage({super.key});
@@ -49,21 +49,70 @@ class ProductListPage extends StatelessWidget {
           BlocBuilder<ProductListBloc, ProductListState>(
             builder: (context, state) {
               if (state is ProductListLoaded) {
+                final categories = state.products
+                    .map((p) => p.category)
+                    .toSet()
+                    .toList()
+                  ..sort();
+                final brands = state.products
+                    .map((p) => p.brand)
+                    .toSet()
+                    .toList()
+                  ..sort();
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FilterDropdown(
+                          label: 'Category',
+                          items: categories,
+                          selectedValue: state.selectedCategory,
+                          onChanged: (value) {
+                            if (value == null) {
+                              context.read<ProductListBloc>().add(LoadProducts());
+                            } else {
+                              context
+                                  .read<ProductListBloc>()
+                                  .add(FilterByCategory(value));
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: FilterDropdown(
+                          label: 'Brand',
+                          items: brands,
+                          selectedValue: state.selectedBrand,
+                          onChanged: (value) {
+                            if (value == null) {
+                              context.read<ProductListBloc>().add(LoadProducts());
+                            } else {
+                              context
+                                  .read<ProductListBloc>()
+                                  .add(FilterByBrand(value));
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+          const SizedBox(height: 8),
+          BlocBuilder<ProductListBloc, ProductListState>(
+            builder: (context, state) {
+              if (state is ProductListLoaded) {
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
-                      CustomFilterChip(
-                        label: 'All Categories',
-                        isSelected: state.selectedCategory == null,
-                        onSelected: (selected) {
-                          if (selected) {
-                            context.read<ProductListBloc>().add(LoadProducts());
-                          }
-                        },
-                      ),
-                      const SizedBox(width: 8),
                       CustomFilterChip(
                         label: 'Sort by Name',
                         isSelected: state.sortBy == 'name',
@@ -108,7 +157,7 @@ class ProductListPage extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 0.45,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                     ),

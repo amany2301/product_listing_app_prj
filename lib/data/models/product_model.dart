@@ -9,6 +9,7 @@ class ProductModel extends Product {
     required super.mrp,
     required super.sellingRate,
     required super.brand,
+    required super.imageUrl,
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
@@ -20,6 +21,7 @@ class ProductModel extends Product {
       mrp: (data['mrp'] as num).toDouble(),
       sellingRate: (data['sellingRate'] as num).toDouble(),
       brand: data['brand'] as String,
+      imageUrl: data['imageUrl'] as String,
     );
   }
 
@@ -31,6 +33,7 @@ class ProductModel extends Product {
       'mrp': mrp,
       'sellingRate': sellingRate,
       'brand': brand,
+      'imageUrl': imageUrl,
     };
   }
 } 
