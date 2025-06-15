@@ -49,12 +49,12 @@ class ProductListPage extends StatelessWidget {
           BlocBuilder<ProductListBloc, ProductListState>(
             builder: (context, state) {
               if (state is ProductListLoaded) {
-                final categories = state.products
+                final allCategories = state.products
                     .map((p) => p.category)
                     .toSet()
                     .toList()
                   ..sort();
-                final brands = state.products
+                final allBrands = state.products
                     .map((p) => p.brand)
                     .toSet()
                     .toList()
@@ -67,7 +67,7 @@ class ProductListPage extends StatelessWidget {
                       Expanded(
                         child: FilterDropdown(
                           label: 'Category',
-                          items: categories,
+                          items: allCategories,
                           selectedValue: state.selectedCategory,
                           onChanged: (value) {
                             if (value == null) {
@@ -84,7 +84,7 @@ class ProductListPage extends StatelessWidget {
                       Expanded(
                         child: FilterDropdown(
                           label: 'Brand',
-                          items: brands,
+                          items: allBrands,
                           selectedValue: state.selectedBrand,
                           onChanged: (value) {
                             if (value == null) {
@@ -153,19 +153,24 @@ class ProductListPage extends StatelessWidget {
                   return Center(child: Text(state.message));
                 }
                 if (state is ProductListLoaded) {
-                  return GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.45,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: state.products.length,
-                    itemBuilder: (context, index) {
-                      final product = state.products[index];
-                      return ProductCard(product: product);
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      context.read<ProductListBloc>().add(LoadProducts());
                     },
+                    child: GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.45,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                      ),
+                      itemCount: state.products.length,
+                      itemBuilder: (context, index) {
+                        final product = state.products[index];
+                        return ProductCard(product: product);
+                      },
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

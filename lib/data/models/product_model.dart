@@ -36,4 +36,28 @@ class ProductModel extends Product {
       'imageUrl': imageUrl,
     };
   }
+
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      id: json['id'] as int,
+      name: json['name'] as String,
+      brand: json['brand'] as String,
+      category: json['category'] as String,
+      mrp: (json['mrp'] as num).toDouble(),
+      sellingRate: (json['sellingRate'] as num).toDouble(),
+      imageUrl: json['imageUrl'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'brand': brand,
+      'category': category,
+      'mrp': mrp,
+      'sellingRate': sellingRate,
+      'imageUrl': imageUrl,
+    };
+  }
 } 
