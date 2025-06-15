@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/theme/app_theme.dart';
 import 'data/repositories/product_repository_impl.dart';
 import 'presentation/bloc/product_list/product_list_bloc.dart';
+import 'presentation/bloc/theme/theme_bloc.dart';
 import 'presentation/pages/product_list_page.dart';
 
 void main() async {
@@ -31,13 +32,20 @@ class MyApp extends StatelessWidget {
               context.read<ProductRepositoryImpl>(),
             ),
           ),
+          BlocProvider(
+            create: (context) => ThemeBloc(),
+          ),
         ],
-        child: MaterialApp(
-          title: 'Product Listing App',
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system,
-          home: const ProductListPage(),
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Product Listing App',
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: (state as ThemeInitial).isDarkMode ? ThemeMode.dark : ThemeMode.light,
+              home: const ProductListPage(),
+            );
+          },
         ),
       ),
     );

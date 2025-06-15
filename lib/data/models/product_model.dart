@@ -14,7 +14,7 @@ class ProductModel extends Product {
   factory ProductModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return ProductModel(
-      id: data['id'] as int,
+      id: (data['id'] as num).toInt(),
       name: data['name'] as String,
       category: data['category'] as String,
       mrp: (data['mrp'] as num).toDouble(),

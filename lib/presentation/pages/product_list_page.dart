@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/product_list/product_list_bloc.dart';
 import '../bloc/product_list/product_list_event.dart';
 import '../bloc/product_list/product_list_state.dart';
+import '../bloc/theme/theme_bloc.dart';
 import '../widgets/product_card.dart';
 import '../widgets/filter_chip.dart';
+
 
 class ProductListPage extends StatelessWidget {
   const ProductListPage({super.key});
@@ -16,9 +18,13 @@ class ProductListPage extends StatelessWidget {
         title: const Text('Products'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.brightness_6),
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            ),
             onPressed: () {
-              // TODO: Implement theme toggle
+              context.read<ThemeBloc>().add(ToggleTheme());
             },
           ),
         ],
