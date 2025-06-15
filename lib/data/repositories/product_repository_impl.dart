@@ -25,13 +25,17 @@ class ProductRepositoryImpl implements ProductRepository {
   @override
   Future<Either<Exception, List<Product>>> searchProducts(String query) async {
     try {
-      final snapshot = await _firestore
-          .collection('products')
-          .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThanOrEqualTo: query + '\uf8ff')
-          .get();
+      if (query.isEmpty) {
+        return getProducts();
+      }
+
+      final snapshot = await _firestore.collection('products').get();
       final products = snapshot.docs
           .map((doc) => ProductModel.fromFirestore(doc))
+          .where((product) => 
+              product.name.toLowerCase().contains(query.toLowerCase()) ||
+              product.brand.toLowerCase().contains(query.toLowerCase()) ||
+              product.category.toLowerCase().contains(query.toLowerCase()))
           .toList();
       return Right(products);
     } catch (e) {

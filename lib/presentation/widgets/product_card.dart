@@ -36,7 +36,7 @@ class ProductCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
-            Row(
+            Column(
               children: [
                 Text(
                   '₹${product.mrp.toStringAsFixed(2)}',
