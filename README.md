@@ -2,6 +2,14 @@
 
 A Flutter app to list and search products using Firebase Firestore. Includes support for light/dark theme toggling, BLoC state management, and app flavoring (`dev` and `release`).
 
+  lib/
+├── core/                # Theme & shared config
+├── data/                # Models and repositories
+├── domain/              # Entities & interfaces
+├── presentation/        # UI, BLoC, widgets
+├── main_dev.dart        # Entry point for dev
+├── main_release.dart    # Entry point for release
+├── main_common.dart     # Shared bootstrap logic
 ---
 
 ##  Features
@@ -22,6 +30,9 @@ A Flutter app to list and search products using Firebase Firestore. Includes sup
 - Firebase CLI configured
 - Xcode (for iOS)
 - Android Studio (for Android)
+
+
+
 
 ### 2.  Install Dependencies
 
