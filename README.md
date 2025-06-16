@@ -28,3 +28,5 @@ A Flutter app to list and search products using Firebase Firestore. Includes sup
 ```bash
 flutter pub get
 
+flutter pub run build_runner build --delete-conflicting-outputs
+
