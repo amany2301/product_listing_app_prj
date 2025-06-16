@@ -1,16 +1,30 @@
-# product_listing_app_prj
+#  Product Listing App
 
-A new Flutter project.
+A Flutter app to list and search products using Firebase Firestore. Includes support for light/dark theme toggling, BLoC state management, and app flavoring (`dev` and `release`).
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+##  Features
 
-A few resources to get you started if this is your first Flutter project:
+-  Firebase Firestore integration
+-  Dark & light theme toggle (via BLoC)
+-  App flavor support (`dev`, `release`)
+-  Product search and filters
+-  Unit tests with Mockito
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+##  Setup Instructions
+
+### 1.  Prerequisites
+
+- Flutter SDK (3.22.0 or later)
+- Firebase CLI configured
+- Xcode (for iOS)
+- Android Studio (for Android)
+
+### 2.  Install Dependencies
+
+```bash
+flutter pub get
+
