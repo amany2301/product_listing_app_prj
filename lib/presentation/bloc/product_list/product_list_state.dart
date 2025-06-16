@@ -13,14 +13,16 @@ class ProductListInitial extends ProductListState {}
 class ProductListLoading extends ProductListState {}
 
 class ProductListLoaded extends ProductListState {
-  final List<Product> products;
+  final List<Product> allProducts;
+  final List<Product> filteredProducts;
   final String? selectedCategory;
   final String? selectedBrand;
   final String? searchQuery;
   final String? sortBy;
 
   const ProductListLoaded({
-    required this.products,
+    required this.allProducts,
+    required this.filteredProducts,
     this.selectedCategory,
     this.selectedBrand,
     this.searchQuery,
@@ -28,7 +30,7 @@ class ProductListLoaded extends ProductListState {
   });
 
   @override
-  List<Object?> get props => [products, selectedCategory, selectedBrand, searchQuery, sortBy];
+  List<Object?> get props => [allProducts, filteredProducts, selectedCategory, selectedBrand, searchQuery, sortBy];
 }
 
 class ProductListError extends ProductListState {

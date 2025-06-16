@@ -71,8 +71,8 @@ void main() {
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
-          'products',
+          (state) => state.allProducts,
+          'all products',
           testProducts,
         ),
       ],
@@ -91,7 +91,7 @@ void main() {
         isA<ProductListError>().having(
           (state) => state.message,
           'error message',
-          'Failed to load products',
+          'Exception: Failed to load products',
         ),
       ],
     );
@@ -101,21 +101,21 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.filterByCategory('Category X'))
+            .thenAnswer((_) async => Right(testProducts.where((p) => p.category == 'Category X').toList()));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(FilterByCategory('Category X'));
-      },
+      act: (bloc) => bloc.add(FilterByCategory('Category X')),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'filtered products',
           testProducts.where((p) => p.category == 'Category X').toList(),
         ),
@@ -127,21 +127,21 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.filterByBrand('Brand A'))
+            .thenAnswer((_) async => Right(testProducts.where((p) => p.brand == 'Brand A').toList()));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(FilterByBrand('Brand A'));
-      },
+      act: (bloc) => bloc.add(FilterByBrand('Brand A')),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'filtered products',
           testProducts.where((p) => p.brand == 'Brand A').toList(),
         ),
@@ -153,21 +153,21 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.sortByName())
+            .thenAnswer((_) async => Right([...testProducts]..sort((a, b) => a.name.compareTo(b.name))));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(SortByName());
-      },
+      act: (bloc) => bloc.add(SortByName()),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'sorted products',
           [...testProducts]..sort((a, b) => a.name.compareTo(b.name)),
         ),
@@ -179,21 +179,21 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.sortByMRP())
+            .thenAnswer((_) async => Right([...testProducts]..sort((a, b) => a.mrp.compareTo(b.mrp))));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(SortByMRP());
-      },
+      act: (bloc) => bloc.add(SortByMRP()),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'sorted products',
           [...testProducts]..sort((a, b) => a.mrp.compareTo(b.mrp)),
         ),
@@ -205,28 +205,23 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.searchProducts('Test'))
+            .thenAnswer((_) async => Right(testProducts.where((p) => p.name.contains('Test')).toList()));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(SearchProducts('Test'));
-      },
+      act: (bloc) => bloc.add(SearchProducts('Test')),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'searched products',
-          testProducts
-              .where((p) =>
-                  p.name.toLowerCase().contains('test') ||
-                  p.brand.toLowerCase().contains('test') ||
-                  p.category.toLowerCase().contains('test'))
-              .toList(),
+          testProducts.where((p) => p.name.contains('Test')).toList(),
         ),
       ],
     );
@@ -236,21 +231,21 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.searchProducts(''))
+            .thenAnswer((_) async => Right(testProducts));
         return bloc;
       },
-      act: (bloc) {
-        bloc.add(LoadProducts());
-        bloc.add(SearchProducts(''));
-      },
+      act: (bloc) => bloc.add(SearchProducts('')),
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'all products after empty search',
           testProducts,
         ),
@@ -262,32 +257,34 @@ void main() {
       build: () {
         when(mockRepository.getProducts())
             .thenAnswer((_) async => Right(testProducts));
+        when(mockRepository.filterByCategory('Category X'))
+            .thenAnswer((_) async => Right(testProducts.where((p) => p.category == 'Category X').toList()));
+        when(mockRepository.filterByBrand('Brand A'))
+            .thenAnswer((_) async => Right(testProducts.where((p) => p.brand == 'Brand A').toList()));
         return bloc;
       },
       act: (bloc) {
-        bloc.add(LoadProducts());
         bloc.add(FilterByCategory('Category X'));
         bloc.add(FilterByBrand('Brand A'));
       },
       expect: () => [
         isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.allProducts,
           'all products',
           testProducts,
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'category filtered products',
           testProducts.where((p) => p.category == 'Category X').toList(),
         ),
+        isA<ProductListLoading>(),
         isA<ProductListLoaded>().having(
-          (state) => state.products,
+          (state) => state.filteredProducts,
           'category and brand filtered products',
-          testProducts
-              .where((p) =>
-                  p.category == 'Category X' && p.brand == 'Brand A')
-              .toList(),
+          testProducts.where((p) => p.category == 'Category X' && p.brand == 'Brand A').toList(),
         ),
       ],
     );

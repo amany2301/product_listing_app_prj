@@ -49,12 +49,12 @@ class ProductListPage extends StatelessWidget {
           BlocBuilder<ProductListBloc, ProductListState>(
             builder: (context, state) {
               if (state is ProductListLoaded) {
-                final allCategories = state.products
+                final allCategories = state.allProducts
                     .map((p) => p.category)
                     .toSet()
                     .toList()
                   ..sort();
-                final allBrands = state.products
+                final allBrands = state.allProducts
                     .map((p) => p.brand)
                     .toSet()
                     .toList()
@@ -165,9 +165,9 @@ class ProductListPage extends StatelessWidget {
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
-                      itemCount: state.products.length,
+                      itemCount: state.filteredProducts.length,
                       itemBuilder: (context, index) {
-                        final product = state.products[index];
+                        final product = state.filteredProducts[index];
                         return ProductCard(product: product);
                       },
                     ),

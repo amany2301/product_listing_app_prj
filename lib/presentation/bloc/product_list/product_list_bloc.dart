@@ -20,7 +20,10 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     final result = await _repository.getProducts();
     result.fold(
       (error) => emit(ProductListError(error.toString())),
-      (products) => emit(ProductListLoaded(products: products)),
+      (products) => emit(ProductListLoaded(
+        allProducts: products,
+        filteredProducts: products,
+      )),
     );
   }
 
@@ -32,7 +35,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold(
         (error) => emit(ProductListError(error.toString())),
         (products) => emit(ProductListLoaded(
-          products: products,
+          allProducts: currentState.allProducts,
+          filteredProducts: products,
           selectedCategory: currentState.selectedCategory,
           selectedBrand: currentState.selectedBrand,
           searchQuery: event.query,
@@ -50,7 +54,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold(
         (error) => emit(ProductListError(error.toString())),
         (products) => emit(ProductListLoaded(
-          products: products,
+          allProducts: currentState.allProducts,
+          filteredProducts: products,
           selectedCategory: event.category,
           selectedBrand: currentState.selectedBrand,
           searchQuery: currentState.searchQuery,
@@ -68,7 +73,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold(
         (error) => emit(ProductListError(error.toString())),
         (products) => emit(ProductListLoaded(
-          products: products,
+          allProducts: currentState.allProducts,
+          filteredProducts: products,
           selectedCategory: currentState.selectedCategory,
           selectedBrand: event.brand,
           searchQuery: currentState.searchQuery,
@@ -86,7 +92,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold(
         (error) => emit(ProductListError(error.toString())),
         (products) => emit(ProductListLoaded(
-          products: products,
+          allProducts: currentState.allProducts,
+          filteredProducts: products,
           selectedCategory: currentState.selectedCategory,
           selectedBrand: currentState.selectedBrand,
           searchQuery: currentState.searchQuery,
@@ -104,7 +111,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
       result.fold(
         (error) => emit(ProductListError(error.toString())),
         (products) => emit(ProductListLoaded(
-          products: products,
+          allProducts: currentState.allProducts,
+          filteredProducts: products,
           selectedCategory: currentState.selectedCategory,
           selectedBrand: currentState.selectedBrand,
           searchQuery: currentState.searchQuery,
