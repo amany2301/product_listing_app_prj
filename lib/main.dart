@@ -11,11 +11,18 @@ import 'presentation/pages/product_list_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp(MyApp());
+}
+
+///take input of flavour
+Future<void> startApp({required String flavor}) async {
+  // runApp(MyApp(flavor: flavor));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // final String flavor;
+  // MyApp({super.key,required this.flavor});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
