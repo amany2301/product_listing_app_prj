@@ -27,6 +27,7 @@ A Flutter app to list and search products using Firebase Firestore. Includes sup
 
 
 ### 2.  Install Dependencies
+Select the main.dart file and run the App.
 
 ```bash
 flutter pub get
